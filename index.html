@@ -15,18 +15,24 @@
   <div id="upgradeArea">
     
   </div>
-  </main>
-  <button id="settings">Settings</button>
-  <div id="settingsArea">
-    <button id="resetGame" style="color: white; red; background-color: red;">Reset Game</button>
+  <button id="settings">Open settings</button>
+  <div id="settingsArea" style="display: none;">
+    <button id="resetGame" style="color: white;  background-color: red;">Reset Game</button>
+    <select>
+      <option value="0">dark theme</option>
+      <option value="1">noobs unblocked games</option>
+      <option value="2">light</option>
+      <option value="3">discord</option>
+    </select>
     <button id="openStats">Open Stats</button>
 
   </div>
-  <div id="stats">
+  <div id="stats" style="display: none;">
     <p>Total clicks: <span id="total-clicks">0</span></p>
   </div>
-</body>
+</main>
+<script type="module" src="Javascript/settings.js"></script>
 <script type="module" src="Javascript/game.js"></script>
 <script type="module" src="Javascript/engine.js"></script>
-<script type="module" src="Javascript/settings.js"></script>
+</body>
 </html>

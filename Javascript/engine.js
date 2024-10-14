@@ -49,13 +49,18 @@ export function upgradeLogic(){
 }
 
 export function saveGame() {
-    saveData.save('gameState', stats);
+    const gameState = {
+        stats: stats,
+        upgrades: upgrades
+    };
+    saveData.save('gameState', gameState);
 };
 
 export function loadGame() {
-    const savedStats = saveData.load('gameState');
-    if (savedStats) {
-        Object.assign(stats, savedStats);
+    const savedState = saveData.load('gameState');
+    if (savedState) {
+        Object.assign(stats, savedState.stats);
+        Object.assign(upgrades, savedState.upgrades);
         updateDisplay();
     };
 };
