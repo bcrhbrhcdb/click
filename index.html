@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!--
-      Need a visual blank slate?
-      Remove all code in `styles.css`!
-    -->
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
-    <nav>
-      <a href="/" aria-current="page">Home</a>
-      <a href="/page2.html">Other page</a>
-    </nav>
-    <main>
-      <h1>Home page</h1>
-    </main>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css"/>
+  <title>Click.</title>
+</head>
+<body>
+  <main>
+  <h1>Click.</h1>
+  <p>Clicks. <span id="clicks">0</span></p>
+  <button id="click-button">Click. </button>
+  </main>
+  <div id="stats">
+    <p>Total clicks: <span id="total-clicks"></span></p>
+  </div>
+</body>
+<script type="module" src="Javascript/game.js"></script>
 </html>

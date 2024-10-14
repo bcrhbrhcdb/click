@@ -3,6 +3,24 @@
     "start": "servor --reload"
   },
   "dependencies": {
-    "servor": "^4.0.2"
-  }
+    "servor": "^4.0.2",
+    "stall": "^0.0.2"
+  },
+  "name": "click-geam",
+  "description": "[Edit in StackBlitz next generation editor ⚡️](https://stackblitz.com/~/github.com/bcrhbrhcdb/click)",
+  "version": "0.1.0",
+  "main": "script.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bcrhbrhcdb/click.git"
+  },
+  "keywords": [
+    "start"
+  ],
+  "author": "noob_k1ng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bcrhbrhcdb/click/issues"
+  },
+  "homepage": "https://github.com/bcrhbrhcdb/click#readme"
 }
