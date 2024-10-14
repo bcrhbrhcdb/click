@@ -1,5 +1,4 @@
 import { saveData } from './save.js';
-import { upgrades } from './upgrades.js';
 
 export const stats = {
     clicks: 0,
@@ -21,19 +20,7 @@ export function addClicks() {
     console.log(`Clicks: ${stats.clicks} | Total Clicks: ${stats.totalClicks}`);
     saveGame(); // Save after each click
 };
-export function upgradeLogic(upgrade){
-    if(upgrade.cost === totalClicks){
-        const upgradeArea = document.getElementById("upgradeArea");
-        const addUpgrade = 
-        `
-        <button class="upgrade" id="upgrade">
-        Name: ${upgrade.title}
-        Gives: ${upgrade.gives}
-        Owned: ${upgrade.owned}
-        </button>
-        `
-    }
-}
+
 export function saveGame() {
     saveData.save('gameState', stats);
 };
