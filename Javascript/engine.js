@@ -30,7 +30,7 @@ export function upgradeLogic(){
         const upgrade = upgrades[key];
         if(stats.totalClicks >= upgrade.cost && (upgrade.repeatable || upgrade.owned === 0)){
             const upgradeButton = document.createElement('button');
-            upgradeButton.className = 'upgrade';
+            upgradeButton.className = 'changeable';
             upgradeButton.id = `upgrade-${key}`;
             upgradeButton.innerHTML = `
                 Name: ${upgrade.title}<br>

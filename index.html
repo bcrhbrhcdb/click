@@ -8,31 +8,30 @@
 </head>
 <body>
   <main>
-  <h1>Click. V.0.1.0</h1>
-
-  <p>Clicks. <span id="clicks">0</span></p>
-  <button id="click-button">Click. </button>
-  <div id="upgradeArea">
-    
-  </div>
-  <button id="settings">Open settings</button>
-  <div id="settingsArea" style="display: none;">
-    <button id="resetGame" style="color: white;  background-color: red;">Reset Game</button>
-    <select>
-      <option value="0">dark theme</option>
-      <option value="1">noobs unblocked games</option>
-      <option value="2">light</option>
-      <option value="3">discord</option>
-    </select>
-    <button id="openStats">Open Stats</button>
-
-  </div>
-  <div id="statArea" style="display: none;">
-    <p>Total clicks: <span id="total-clicks">0</span></p>
-  </div>
-</main>
-<script type="module" src="Javascript/settings.js"></script>
-<script type="module" src="Javascript/game.js"></script>
-<script type="module" src="Javascript/engine.js"></script>
+    <h1 class="changeable">Click. V.0.1.0</h1>
+    <p class="changeable">Clicks. <span id="clicks">0</span></p>
+    <button id="click-button" class="changeable">Click. </button>
+    <div id="upgradeArea">
+      <!-- Upgrade buttons can go here -->
+    </div>
+    <button id="settings" class="changeable">Open settings</button>
+    <div id="settingsArea" style="display: none;">
+      <button id="resetGame" class="changeable" style="color: white; background-color: red;">Reset Game</button>
+      <select id="switchTheme" class="dropdown">
+        <option value="dark">dark theme</option>
+        <option value="noob">noobs unblocked games</option>
+        <option value="light">light</option>
+        <option value="discord">discord</option>
+      </select>
+      <button id="openStats" class="changeable">Open Stats</button>
+    </div>
+    <div id="statArea" style="display: none;">
+      <p class="changeable">Total clicks: <span id="total-clicks">0</span></p>
+    </div>
+  </main>
+  <script type="module" src="Javascript/settings.js"></script>
+  <script type="module" src="Javascript/game.js"></script>
+  <script type="module" src="Javascript/engine.js"></script>
 </body>
+
 </html>
