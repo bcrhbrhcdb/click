@@ -1,12 +1,13 @@
 import { saveData } from "./save.js";
 import { stats, updateDisplay } from "./engine.js";
 import { upgrades } from "./upgrades.js";
+const openStats = document.getElementById("openStats")
 
 // Use querySelector instead of getElementById for more flexibility
 const openSettings = document.querySelector("#settings");
 const resetButton = document.querySelector("#resetGame");
 const settingArea = document.querySelector("#settingsArea");
-const showStat = document.getElementById("stats");
+const showStat = document.getElementById("statArea");
 function openSettingArea() {
     if (settingArea) {
         if (settingArea.style.display === "block") {
@@ -56,6 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 function showStats(){
+    if(showStat.style.display === "none"){
     showStat.style.display = "block";
+    openStats.innerText = "Close Stats"
+    }else if(showStat.style.display === "block"){
+    showStat.style.display = "none";
+    openStats.innerText = "Open Stats"
+    }else{
+        alert("something is fucked up... email me rn baza")
+    }
 };
-showStat.addEventListener("click", showStats);
+openStats.addEventListener("click", showStats);
