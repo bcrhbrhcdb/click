@@ -23,11 +23,13 @@ export function addClicks() {
 };
 export function upgradeLogic(upgrade){
     if(upgrade.cost === totalClicks){
-        const upgradeArea = document.getElementById("upgradeArea")
+        const upgradeArea = document.getElementById("upgradeArea");
         const addUpgrade = 
         `
         <button class="upgrade" id="upgrade">
-        
+        Name: ${upgrade.title}
+        Gives: ${upgrade.gives}
+        Owned: ${upgrade.owned}
         </button>
         `
     }

@@ -5,6 +5,7 @@ export const upgrades = {
         title: "gib click",
         cost: 50,
         type: upgradeTypes.ADDITIVE,
-        gives: 1
+        gives: 1,
+        owned: 0,
     }
 }
