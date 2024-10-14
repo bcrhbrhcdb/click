@@ -1,4 +1,4 @@
-import { stats, clicks, clickButton, addClicks, totalClicks } from "/engine.js";
+import { stats, clicks, clickButton, addClicks, totalClicks } from "Javascript/engine.js";
 
 export function updateDisplay() {
     clicks.innerText = stats.clicks;
