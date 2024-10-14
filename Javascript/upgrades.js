@@ -1,11 +1,10 @@
+import {  upgradeTypes } from "./upgradeTypes";
 
 export const upgrades = {
-    upgrade1: {
-        title: "click",
+    clicker1: {
+        title: "gib click",
         cost: 50,
-        additive: {
-
-        }
-
+        type: upgradeTypes.ADDITIVE,
+        gives: 1
     }
 }

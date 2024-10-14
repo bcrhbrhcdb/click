@@ -1,14 +1,15 @@
-import { stats, clicks, clickButton, addClicks, totalClicks } from "./engine.js";
-
-export function updateDisplay() {
-    clicks.innerText = stats.clicks;
-    totalClicks.innerText = stats.totalClicks;
-}
+import { stats, clicks, clickButton, addClicks, totalClicks, loadGame, updateDisplay } from "./engine.js";
 
 clickButton.addEventListener("click", () => {
     addClicks();
     updateDisplay();
 });
 
-// Initialize display
-updateDisplay();
+// Initialize game
+function initGame() {
+    loadGame();
+    updateDisplay();
+}
+
+// Call initGame when the page loads
+window.addEventListener('load', initGame);

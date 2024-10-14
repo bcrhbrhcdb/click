@@ -1,3 +1,6 @@
+import { saveData } from './save.js';
+import { upgrades } from './upgrades.js';
+
 export const stats = {
     clicks: 0,
     totalClicks: 0,
@@ -11,8 +14,37 @@ export const clicks = document.getElementById("clicks");
 export const totalClicks = document.getElementById("total-clicks");
 
 export function addClicks() {
-    const newClicks = stats.clicks += stats.amountPerClick;
-    const newTotalClicks = stats.totalClicks += stats.amountPerClick;
-    clicks.innerText = newClicks;
-    totalClicks.innerText = newTotalClicks;
+    stats.clicks += stats.amountPerClick;
+    stats.totalClicks += stats.amountPerClick;
+    clicks.innerText = stats.clicks;
+    totalClicks.innerText = stats.totalClicks;
+    console.log(`Clicks: ${stats.clicks} | Total Clicks: ${stats.totalClicks}`);
+    saveGame(); // Save after each click
+};
+export function upgradeLogic(upgrade){
+    if(upgrade.cost === totalClicks){
+        const upgradeArea = document.getElementById("upgradeArea")
+        const addUpgrade = 
+        `
+        <button class="upgrade" id="upgrade">
+        
+        </button>
+        `
+    }
 }
+export function saveGame() {
+    saveData.save('gameState', stats);
+};
+
+export function loadGame() {
+    const savedStats = saveData.load('gameState');
+    if (savedStats) {
+        Object.assign(stats, savedStats);
+        updateDisplay();
+    };
+};
+
+export function updateDisplay() {
+    clicks.innerText = stats.clicks;
+    totalClicks.innerText = stats.totalClicks;
+};
