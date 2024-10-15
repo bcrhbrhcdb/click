@@ -32,7 +32,7 @@ export const upgradeTypes = {
         const cpsValue = document.getElementById("cPS");
         if (cpsDisplay && cpsValue) {
             cpsDisplay.style.display = "block";
-            cpsValue.textContent = Number(stats.cps).toFixed(1);
+            cpsValue.textContent = Number(stats.cps).toFixed(2);
         } else {
             console.error("CPS display elements not found");
         }
