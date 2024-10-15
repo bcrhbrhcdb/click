@@ -88,10 +88,9 @@ const themes = {
             width: '100%',       
             fontWeight: '500',       
             transition: 'transform 0.5s',     
-            padding: '2px',
-            margin: '2px',
+            padding: '10px',
+            margin: '5px',
             display: 'block',
-            position: 'relative',
             cursor: 'pointer'
         },
         text: { color: 'rgb(86, 72, 72)' },
