@@ -1,5 +1,6 @@
 import { upgrades, buyUpgrade } from "./upgrades.js"
 import { saveData } from './save.js';
+
 export const stats = {
     clicks: 0,
     totalClicks: 0,

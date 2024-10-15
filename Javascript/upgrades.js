@@ -10,7 +10,18 @@ export const upgrades = {
         gives: 1,
         owned: 0,
         repeatable: false,
-    }
+    },
+    clicker1Boost: {
+        title: "gib click gib more (1)",
+        cost: 100,
+        initialCost: 100,
+        type: upgradeTypes.MULTIPLICATIVE,
+        gives: 1,
+        owned: 0,
+        repeatable: false,
+        costIncrease: 1.5,
+        affectedUpgrade: 'clicker1'
+    },
 }
 
 export function buyUpgrade(upgrade){
