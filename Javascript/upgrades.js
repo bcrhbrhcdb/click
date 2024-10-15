@@ -46,7 +46,7 @@ title: "upgrade autoclicker",
         cost: 1000,
         initialCost: 1000,
         type: "MOREPASSIVE",
-        gives: () => 0.75, // 50% of CPS while offline
+        gives: () => 2, // 50% of CPS while offline
         owned: 0,
         repeatable: false,
         affectedUpgrade: "autoClicker",
