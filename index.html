@@ -9,7 +9,7 @@
 <body>
   <main>
     <div class="changeable">
-    <h1 class="changeable">Click. V.0.1.0</h1>
+    <h1 class="changeable">Click. V.0.1.0 (lots of data resets will happen..)</h1>
     <p class="changeable">Clicks. <span id="clicks">0</span></p>
     <p class="changeable" style="display: none;" id="cpsDisplay">Clicks per second: <span id="cPS">0.0</span></p>
     <button id="click-button" class="changeable">Click. </button>
@@ -26,6 +26,10 @@
         <option value="light">light</option>
         <option value="discord">discord</option>
       </select>
+      <!-- Add this inside your settingsArea div -->
+<button id="exportSave" class="changeable">Export Save</button>
+<button id="importSave" class="changeable">Import Save</button>
+<input type="file" id="importFile" style="display: none;" accept=".json">
       <button id="openStats" class="changeable">Open Stats</button>
     </div>
     <div id="statArea" style="display: none;">

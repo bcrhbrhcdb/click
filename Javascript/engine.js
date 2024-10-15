@@ -168,14 +168,103 @@ export function resetGame() {
         startGameTick();
     }
 }
+export function exportSave() {
+    const gameState = {
+        stats: stats,
+        upgrades: Object.fromEntries(
+            Object.entries(upgrades).map(([key, upgrade]) => [
+                key,
+                {
+                    owned: upgrade.owned,
+                    cost: upgrade.cost
+                }
+            ])
+        ),
+        version: "0.1.0" // Add a version number to your save file
+    };
+    
+    const saveString = btoa(JSON.stringify(gameState)); // Encode the save data
+    
+    // Create a Blob with the save data
+    const blob = new Blob([saveString], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    
+    // Create a temporary anchor element to trigger the download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "click_save.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+export function importSave(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const saveString = e.target.result;
+                const gameState = JSON.parse(atob(saveString)); // Decode and parse the save data
+                
+                // Verify the save file version
+                if (gameState.version !== "0.1.0") {
+                    throw new Error("Incompatible save file version");
+                }
+                
+                // Validate and sanitize the imported data
+                if (gameState.stats && gameState.upgrades) {
+                    // Reset the game state
+                    stats.clicks = 0;
+                    stats.totalClicks = 0;
+                    stats.amountPerClick = 1;
+                    stats.upgradesOwned = [];
+                    stats.cps = 0;
+                    stats.offlineProgressRate = 0;
+                    
+                    // Apply the imported stats (with validation)
+                    stats.clicks = Math.max(0, Number(gameState.stats.clicks) || 0);
+                    stats.totalClicks = Math.max(0, Number(gameState.stats.totalClicks) || 0);
+                    stats.lastSaveTime = Date.now();
+                    
+                    // Load upgrades
+                    loadUpgrades(gameState.upgrades);
+                    
+                    // Recalculate all upgrade effects
+                    recalculateUpgradeEffects();
+                    
+                    updateDisplay();
+                    saveGame();
+                    alert("Save file imported successfully!");
+                } else {
+                    throw new Error("Invalid save file structure");
+                }
+            } catch (error) {
+                console.error("Error importing save:", error);
+                alert("Error importing save file. Please make sure it's a valid save file.");
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
+// ... (existing code)
 
 export function initGame() {
     loadGame();
     stats.cps = Number(stats.cps);
     stats.offlineProgressRate = Number(stats.offlineProgressRate);
     createUpgradeElements();
-    recalculateUpgradeEffects(); // Add this line
+    recalculateUpgradeEffects();
     updateDisplay();
     startGameTick();
     startAutoSave();
+    
+    // Add event listeners for export and import buttons
+    document.getElementById("exportSave").addEventListener("click", exportSave);
+    document.getElementById("importSave").addEventListener("click", () => {
+        document.getElementById("importFile").click();
+    });
+    document.getElementById("importFile").addEventListener("change", importSave);
 }
