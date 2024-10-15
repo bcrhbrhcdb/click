@@ -24,13 +24,22 @@ export const upgrades = {
     },
     autoClicker: {
         title: "you want idle?",
-        cost: 20,
-        initialCost: 20,
+        cost: 10,
+        initialCost: 10,
         type: "PASSIVEBUILDING1",
-        gives: 0.3,
+        gives: () => 0.1,
         owned: 0,
         repeatable: true,
         costIncrease: 1.23,
+    },
+    offlineProgress: {
+        title: "Offline Progress",
+        cost: 100000,
+        initialCost: 100000,
+        type: "OFFLINE",
+        gives: 0.5, // 50% of CPS while offline
+        owned: 0,
+        repeatable: false,
     }
 };
 
@@ -66,12 +75,6 @@ export function createUpgradeElements() {
             const upgradeButton = document.createElement('button');
             upgradeButton.className = 'changeable';
             upgradeButton.id = `upgrade-${key}`;
-            upgradeButton.innerHTML = `
-                Name: ${upgrade.title}<br>
-                ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
-                Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost.toFixed(2)}
-            `;
             upgradeButton.onclick = () => buyUpgrade(key);
             upgradeArea.appendChild(upgradeButton);
         }
@@ -99,6 +102,46 @@ export function updateUpgradeButtons() {
         }
     });
 }
+
 export function sortUpgrades() {
     return Object.entries(upgrades).sort((a, b) => a[1].cost - b[1].cost);
+}
+
+export function loadUpgrades(savedUpgrades) {
+    // Reset stats that are affected by upgrades
+    stats.amountPerClick = 1;
+    stats.cps = 0;
+    stats.offlineProgressRate = 0;
+
+    for (let key in savedUpgrades) {
+        if (upgrades[key]) {
+            upgrades[key].owned = savedUpgrades[key].owned;
+            upgrades[key].cost = savedUpgrades[key].cost;
+
+            // Reapply the effect of each owned upgrade
+            for (let i = 0; i < upgrades[key].owned; i++) {
+                if (typeof upgradeTypes[upgrades[key].type] === 'function') {
+                    upgradeTypes[upgrades[key].type](upgrades[key]);
+                }
+            }
+        }
+    }
+}
+
+export function recalculateUpgradeEffects() {
+    // Reset stats that are affected by upgrades
+    stats.amountPerClick = 1;
+    stats.cps = 0;
+    stats.offlineProgressRate = 0;
+
+    // Reapply all upgrade effects
+    for (let key in upgrades) {
+        for (let i = 0; i < upgrades[key].owned; i++) {
+            if (typeof upgradeTypes[upgrades[key].type] === 'function') {
+                upgradeTypes[upgrades[key].type](upgrades[key]);
+            }
+        }
+    }
+
+    updateDisplay();
 }

@@ -27,20 +27,17 @@ export const upgradeTypes = {
         }
     },
     PASSIVEBUILDING1: (upgrade) => {
-        stats.cps += upgrade.gives;
+        stats.cps = Number(stats.cps) + Number(typeof upgrade.gives === 'function' ? upgrade.gives() : upgrade.gives);
         const cpsDisplay = document.getElementById("cpsDisplay");
         const cpsValue = document.getElementById("cPS");
         if (cpsDisplay && cpsValue) {
             cpsDisplay.style.display = "block";
-            cpsValue.textContent = stats.cps.toFixed(2);
+            cpsValue.textContent = Number(stats.cps).toFixed(1);
         } else {
             console.error("CPS display elements not found");
         }
     },
-    OFFLINEPROGRESS: (timeDiff) => {
-        const offlineClicks = stats.cps * (timeDiff / 1000);
-        stats.clicks += offlineClicks;
-        stats.totalClicks += offlineClicks;
-        return offlineClicks;
+    OFFLINE: (upgrade) => {
+        stats.offlineProgressRate = upgrade.gives;
     }
 };

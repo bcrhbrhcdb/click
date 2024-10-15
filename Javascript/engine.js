@@ -1,12 +1,13 @@
-import { upgrades, buyUpgrade, createUpgradeElements, updateUpgradeButtons, sortUpgrades } from "./upgrades.js";
+import { upgrades, buyUpgrade, createUpgradeElements, updateUpgradeButtons, sortUpgrades, loadUpgrades } from "./upgrades.js";
 import { saveData } from './save.js';
-
+import { recalculateUpgradeEffects } from "./upgrades.js";
 export const stats = {
     clicks: 0,
     totalClicks: 0,
     amountPerClick: 1,
     upgradesOwned: [],
     cps: 0,
+    offlineProgressRate: 0,
     lastSaveTime: Date.now()
 };
 
@@ -60,10 +61,20 @@ export function upgradeLogic() {
         }
     });
 }
+
 export function saveGame() {
     const gameState = {
         stats: stats,
-        upgrades: upgrades
+        upgrades: Object.fromEntries(
+            Object.entries(upgrades).map(([key, upgrade]) => [
+                key,
+                {
+                    owned: upgrade.owned,
+                    cost: upgrade.cost,
+                    gives: typeof upgrade.gives === 'function' ? upgrade.gives() : upgrade.gives
+                }
+            ])
+        )
     };
     saveData.save('gameState', gameState);
     stats.lastSaveTime = Date.now();
@@ -73,11 +84,12 @@ export function loadGame() {
     const savedState = saveData.load('gameState');
     if (savedState) {
         Object.assign(stats, savedState.stats);
-        Object.assign(upgrades, savedState.upgrades);
+        loadUpgrades(savedState.upgrades);
+        recalculateUpgradeEffects(); // Add this line
         const currentTime = Date.now();
         const timeDiff = currentTime - stats.lastSaveTime;
-        if (timeDiff > 0) {
-            const offlineProgress = (stats.cps * timeDiff) / 1000;
+        if (timeDiff > 0 && stats.offlineProgressRate > 0) {
+            const offlineProgress = (stats.cps * stats.offlineProgressRate * timeDiff) / 1000;
             stats.clicks += offlineProgress;
             stats.totalClicks += offlineProgress;
             showOfflineProgressPopup(offlineProgress, timeDiff);
@@ -92,22 +104,24 @@ function showOfflineProgressPopup(progress, time) {
     const seconds = Math.floor((time % 60000) / 1000);
     const timeString = `${hours}h ${minutes}m ${seconds}s`;
     
-    alert(`Welcome back! You were gone for ${timeString} and earned ${progress.toFixed(2)} clicks while away.`);
+    if (progress > 0) {
+        alert(`Welcome back! You were gone for ${timeString} and earned ${progress.toFixed(2)} clicks at 50% power  while away.`);
+    }
 }
 
 export function updateDisplay() {
-    clicks.innerText = stats.clicks.toFixed(2);
-    totalClicks.innerText = stats.totalClicks.toFixed(2);
+    clicks.innerText = Number(stats.clicks).toFixed(2);
+    totalClicks.innerText = Number(stats.totalClicks).toFixed(2);
     const amountPerClickDisplay = document.getElementById("amountPerClick");
     if (amountPerClickDisplay) {
-        amountPerClickDisplay.innerText = stats.amountPerClick.toFixed(2);
+        amountPerClickDisplay.innerText = Number(stats.amountPerClick).toFixed(2);
     }
     const cpsDisplay = document.getElementById("cpsDisplay");
     const cpsValue = document.getElementById("cPS");
     if (cpsDisplay && cpsValue) {
         if (stats.cps > 0) {
             cpsDisplay.style.display = "block";
-            cpsValue.textContent = stats.cps.toFixed(1);
+            cpsValue.textContent = Number(stats.cps).toFixed(1);
         } else {
             cpsDisplay.style.display = "none";
         }
@@ -142,6 +156,7 @@ export function resetGame() {
         stats.amountPerClick = 1;
         stats.upgradesOwned = [];
         stats.cps = 0;
+        stats.offlineProgressRate = 0;
 
         for (let key in upgrades) {
             upgrades[key].owned = 0;
@@ -156,7 +171,10 @@ export function resetGame() {
 
 export function initGame() {
     loadGame();
+    stats.cps = Number(stats.cps);
+    stats.offlineProgressRate = Number(stats.offlineProgressRate);
     createUpgradeElements();
+    recalculateUpgradeEffects(); // Add this line
     updateDisplay();
     startGameTick();
     startAutoSave();
