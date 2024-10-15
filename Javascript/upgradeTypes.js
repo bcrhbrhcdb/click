@@ -1,4 +1,5 @@
 import { stats } from "./engine.js";
+import { upgrades } from "./upgrades.js";
 
 export const upgradeTypes = {
     ADDITIVE: (upgrade) => {
@@ -36,7 +37,7 @@ export const upgradeTypes = {
             console.error("CPS display elements not found");
         }
     },
-    OFFLINEPROGRESS: (upgrade)=>{
-        
+    OFFLINEPROGRESS: (upgrade) => {
+        // Implement offline progress logic here
     }
 };

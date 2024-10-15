@@ -27,22 +27,30 @@ export function addClicks(amount = stats.amountPerClick) {
 
 export function upgradeLogic() {
     const upgradeArea = document.getElementById("upgradeArea");
-    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
+    if (!upgradeArea.querySelector('h2')) {
+        upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
+    }
 
     for (let key in upgrades) {
         const upgrade = upgrades[key];
-        if (stats.totalClicks >= upgrade.cost && (upgrade.repeatable || upgrade.owned === 0)) {
-            const upgradeButton = document.createElement('button');
+        let upgradeButton = document.getElementById(`upgrade-${key}`);
+        
+        if (!upgradeButton && (upgrade.repeatable || upgrade.owned === 0)) {
+            upgradeButton = document.createElement('button');
             upgradeButton.className = 'changeable';
             upgradeButton.id = `upgrade-${key}`;
+            upgradeButton.onclick = () => buyUpgrade(key);
+            upgradeArea.appendChild(upgradeButton);
+        }
+        
+        if (upgradeButton) {
             upgradeButton.innerHTML = `
                 Name: ${upgrade.title}<br>
                 ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
                 Gives: ${upgrade.gives}<br>
                 Costs: ${upgrade.cost.toFixed(2)}
             `;
-            upgradeButton.onclick = () => buyUpgrade(key);
-            upgradeArea.appendChild(upgradeButton);
+            upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
         }
     }
 }

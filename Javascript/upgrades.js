@@ -16,7 +16,7 @@ export const upgrades = {
         cost: 450,
         initialCost: 450,
         type: upgradeTypes.MULTIPLICATIVE,
-        gives: 1,
+        gives: 2,
         owned: 0,
         repeatable: false,
         costIncrease: 1.5,
@@ -82,6 +82,7 @@ export function updateUpgradeButtons() {
                 Costs: ${upgrade.cost.toFixed(2)}
             `;
             upgradeButton.disabled = stats.clicks < upgrade.cost;
+            upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
         }
     });
 }
