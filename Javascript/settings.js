@@ -103,7 +103,7 @@ const themes = {
             borderRadius: '10px',
             boxShadow: '0 2px 3px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
             margin: '5px', 
-            textAlign: 'center',
+            textAlign: 'left',
             fontSize: '30px',
             fontWeight: 'bold'
         },
