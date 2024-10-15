@@ -40,6 +40,15 @@ export const upgrades = {
         gives: 0.5, // 50% of CPS while offline
         owned: 0,
         repeatable: false,
+    },
+    increaseAutoclicker:{
+title: "upgrade autoclicker",
+        cost: 1000,
+        initialCost: 1000,
+        type: "MULTIPLICATIVE",
+        gives: () => 0.75, // 50% of CPS while offline
+        owned: 0,
+        repeatable: false,
     }
 };
 
