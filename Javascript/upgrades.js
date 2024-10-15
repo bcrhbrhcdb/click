@@ -5,7 +5,7 @@ export const upgrades = {
     clicker1: {
         title: "gib click",
         cost: 20,
-        initialCost: 50, // Add this line
+        initialCost: 20, // Add this line
         type: upgradeTypes.ADDITIVE,
         gives: 1,
         owned: 0,
@@ -27,3 +27,4 @@ export function buyUpgrade(upgrade){
         }
     }
 }
+

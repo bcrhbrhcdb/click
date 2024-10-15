@@ -8,10 +8,12 @@
 </head>
 <body>
   <main>
+    <div class="changeable">
     <h1 class="changeable">Click. V.0.1.0</h1>
     <p class="changeable">Clicks. <span id="clicks">0</span></p>
     <button id="click-button" class="changeable">Click. </button>
     <div id="upgradeArea">
+      <h2 class="" style="text-align: center;">Upgrades</h2>
       <!-- Upgrade buttons can go here -->
     </div>
     <button id="settings" class="changeable">Open settings</button>
@@ -27,12 +29,13 @@
     </div>
     <div id="statArea" style="display: none;">
       <p class="changeable">total clicks: <span id="total-clicks">0</span></p>
-      <p class="changeable">amount per click: <span id="amountPerClick">1</span></p>
+    </div>
     </div>
   </main>
   <script type="module" src="Javascript/settings.js"></script>
   <script type="module" src="Javascript/game.js"></script>
   <script type="module" src="Javascript/engine.js"></script>
+  <script type="module" src="Javascript/upgrades.js"></script>
 </body>
 
 </html>

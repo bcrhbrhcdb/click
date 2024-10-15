@@ -24,7 +24,7 @@ export function addClicks() {
 
 export function upgradeLogic(){
     const upgradeArea = document.getElementById("upgradeArea");
-    upgradeArea.innerHTML = ''; // Clear existing upgrades
+    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>'; // Clear existing upgrades
 
     for (let key in upgrades) {
         const upgrade = upgrades[key];
