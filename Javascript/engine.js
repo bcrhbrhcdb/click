@@ -1,4 +1,4 @@
-import { upgrades, buyUpgrade, createUpgradeElements } from "./upgrades.js"
+import { upgrades, buyUpgrade, createUpgradeElements, updateUpgradeButtons } from "./upgrades.js";
 import { saveData } from './save.js';
 
 export const stats = {
@@ -15,6 +15,7 @@ export const totalClicks = document.getElementById("total-clicks");
 
 const TICKS_PER_SECOND = 20;
 const TICK_INTERVAL = 1000 / TICKS_PER_SECOND;
+const SAVE_INTERVAL = 60000; // Save every minute
 
 let gameTickInterval;
 
@@ -22,15 +23,15 @@ export function addClicks(amount = stats.amountPerClick) {
     stats.clicks += amount;
     stats.totalClicks += amount;
     updateDisplay();
-};
+}
 
-export function upgradeLogic(){
+export function upgradeLogic() {
     const upgradeArea = document.getElementById("upgradeArea");
-    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>'; // Clear existing upgrades
+    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
 
     for (let key in upgrades) {
         const upgrade = upgrades[key];
-        if(stats.totalClicks >= upgrade.cost && (upgrade.repeatable || upgrade.owned === 0)){
+        if (stats.totalClicks >= upgrade.cost && (upgrade.repeatable || upgrade.owned === 0)) {
             const upgradeButton = document.createElement('button');
             upgradeButton.className = 'changeable';
             upgradeButton.id = `upgrade-${key}`;
@@ -38,13 +39,9 @@ export function upgradeLogic(){
                 Name: ${upgrade.title}<br>
                 ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
                 Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost}
+                Costs: ${upgrade.cost.toFixed(2)}
             `;
-            upgradeButton.onclick = () => {
-                buyUpgrade(key);
-                updateDisplay();
-                saveGame();
-            };
+            upgradeButton.onclick = () => buyUpgrade(key);
             upgradeArea.appendChild(upgradeButton);
         }
     }
@@ -56,7 +53,7 @@ export function saveGame() {
         upgrades: upgrades
     };
     saveData.save('gameState', gameState);
-};
+}
 
 export function loadGame() {
     const savedState = saveData.load('gameState');
@@ -64,8 +61,8 @@ export function loadGame() {
         Object.assign(stats, savedState.stats);
         Object.assign(upgrades, savedState.upgrades);
         updateDisplay();
-    };
-};
+    }
+}
 
 export function updateDisplay() {
     clicks.innerText = stats.clicks.toFixed(2);
@@ -84,12 +81,14 @@ export function updateDisplay() {
             cpsDisplay.style.display = "none";
         }
     }
-    upgradeLogic(); // Call upgradeLogic to update available upgrades
-};
+    updateUpgradeButtons();
+    upgradeLogic();
+}
 
 function gameTick() {
     const clicksToAdd = stats.cps / TICKS_PER_SECOND;
     addClicks(clicksToAdd);
+    updateDisplay();
 }
 
 export function startGameTick() {
@@ -98,6 +97,10 @@ export function startGameTick() {
 
 export function stopGameTick() {
     clearInterval(gameTickInterval);
+}
+
+export function startAutoSave() {
+    setInterval(saveGame, SAVE_INTERVAL);
 }
 
 export function resetGame() {
@@ -125,4 +128,5 @@ export function initGame() {
     createUpgradeElements();
     updateDisplay();
     startGameTick();
+    startAutoSave();
 }

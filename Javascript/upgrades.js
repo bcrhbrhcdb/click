@@ -1,5 +1,5 @@
 import { upgradeTypes } from "./upgradeTypes.js";
-import { stats, updateDisplay, saveGame } from "./engine.js"
+import { stats, updateDisplay, saveGame } from "./engine.js";
 
 export const upgrades = {
     clicker1: {
@@ -27,14 +27,14 @@ export const upgrades = {
         cost: 20,
         initialCost: 20,
         type: upgradeTypes.PASSIVEBUILDING1,
-        gives: 0.1,
+        gives: 0.2,
         owned: 0,
         repeatable: true,
         costIncrease: 1.23,
     }
-}
+};
 
-export function buyUpgrade(upgradeKey){
+export function buyUpgrade(upgradeKey) {
     const upgrade = upgrades[upgradeKey];
     if (stats.clicks >= upgrade.cost) {
         stats.clicks -= upgrade.cost;
@@ -42,7 +42,6 @@ export function buyUpgrade(upgradeKey){
         if (!stats.upgradesOwned.includes(upgrade.title)) {
             stats.upgradesOwned.push(upgrade.title);
         }
-        console.log(stats.upgradesOwned)
         upgrade.owned++;
         if (upgrade.repeatable) {
             upgrade.cost = Math.floor(upgrade.cost * upgrade.costIncrease);
@@ -54,25 +53,22 @@ export function buyUpgrade(upgradeKey){
 
 export function createUpgradeElements() {
     const upgradeArea = document.getElementById('upgradeArea');
-    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>'; // Clear existing upgrades
+    upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
 
     Object.entries(upgrades).forEach(([key, upgrade]) => {
-        if (upgrade.repeatable || upgrade.owned === 0) {
-            const upgradeButton = document.createElement('button');
-            upgradeButton.className = 'changeable';
-            upgradeButton.id = `upgrade-${key}`;
-            upgradeButton.innerHTML = `
-                Name: ${upgrade.title}<br>
-                ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
-                Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost}
-            `;
-            upgradeButton.onclick = () => {
-                buyUpgrade(key);
-            };
-            upgradeArea.appendChild(upgradeButton);
-        }
+        const upgradeButton = document.createElement('button');
+        upgradeButton.className = 'changeable';
+        upgradeButton.id = `upgrade-${key}`;
+        upgradeButton.innerHTML = `
+            Name: ${upgrade.title}<br>
+            ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
+            Gives: ${upgrade.gives}<br>
+            Costs: ${upgrade.cost.toFixed(2)}
+        `;
+        upgradeButton.onclick = () => buyUpgrade(key);
+        upgradeArea.appendChild(upgradeButton);
     });
+    updateUpgradeButtons();
 }
 
 export function updateUpgradeButtons() {
@@ -83,7 +79,7 @@ export function updateUpgradeButtons() {
                 Name: ${upgrade.title}<br>
                 ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
                 Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost}
+                Costs: ${upgrade.cost.toFixed(2)}
             `;
             upgradeButton.disabled = stats.clicks < upgrade.cost;
         }

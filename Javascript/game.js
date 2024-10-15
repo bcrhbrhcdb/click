@@ -1,8 +1,9 @@
-import { clickButton, addClicks, updateDisplay, resetGame, initGame } from "./engine.js";
+import { clickButton, addClicks, updateDisplay, resetGame, initGame, saveGame } from "./engine.js";
 
 clickButton.addEventListener("click", () => {
     addClicks();
     updateDisplay();
+    saveGame();
 });
 
 // Call initGame when the page loads
