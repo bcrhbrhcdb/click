@@ -27,7 +27,7 @@ export const upgrades = {
         cost: 10,
         initialCost: 10,
         type: "PASSIVEBUILDING1",
-        gives: () => 0.2,
+        gives: () => 0.25,
         owned: 0,
         repeatable: true,
         costIncrease: 1.23,
