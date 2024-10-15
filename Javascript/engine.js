@@ -121,7 +121,7 @@ export function updateDisplay() {
     if (cpsDisplay && cpsValue) {
         if (stats.cps > 0) {
             cpsDisplay.style.display = "block";
-            cpsValue.textContent = Number(stats.cps).toFixed(1);
+            cpsValue.textContent = Number(stats.cps).toFixed(3);
         } else {
             cpsDisplay.style.display = "none";
         }
