@@ -37,6 +37,24 @@ export const upgradeTypes = {
             console.error("CPS display elements not found");
         }
     },
+    MOREPASSIVE: (upgrade) => {
+        if (upgrade.affectedUpgrade) {
+            const affectedUpgrade = upgrades[upgrade.affectedUpgrade];
+            if (affectedUpgrade) {
+                affectedUpgrade.gives *= upgrade.gives;
+                stats.cps *= upgrade.gives;
+            } else {
+                console.error(`Affected upgrade ${upgrade.affectedUpgrade} not found`);
+            }
+        } else {
+            stats.cps *= upgrade.gives;
+        }
+        const amountPerClickDisplay = document.getElementById("amountPerClick");
+        if (amountPerClickDisplay) {
+            amountPerClickDisplay.innerText = stats.amountPerClick.toFixed(2);
+        }
+    },
+    
     OFFLINE: (upgrade) => {
         stats.offlineProgressRate = upgrade.gives;
     }
