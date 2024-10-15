@@ -45,6 +45,12 @@ export function buyUpgrade(upgradeKey) {
         upgrade.owned++;
         if (upgrade.repeatable) {
             upgrade.cost = Math.floor(upgrade.cost * upgrade.costIncrease);
+        } else {
+            // Remove the upgrade button if it's not repeatable
+            const upgradeButton = document.getElementById(`upgrade-${upgradeKey}`);
+            if (upgradeButton) {
+                upgradeButton.remove();
+            }
         }
         updateDisplay();
         saveGame();
@@ -55,24 +61,29 @@ export function createUpgradeElements() {
     const upgradeArea = document.getElementById('upgradeArea');
     upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
 
-    Object.entries(upgrades).forEach(([key, upgrade]) => {
-        const upgradeButton = document.createElement('button');
-        upgradeButton.className = 'changeable';
-        upgradeButton.id = `upgrade-${key}`;
-        upgradeButton.innerHTML = `
-            Name: ${upgrade.title}<br>
-            ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
-            Gives: ${upgrade.gives}<br>
-            Costs: ${upgrade.cost.toFixed(2)}
-        `;
-        upgradeButton.onclick = () => buyUpgrade(key);
-        upgradeArea.appendChild(upgradeButton);
+    const sortedUpgrades = sortUpgrades();
+    
+    sortedUpgrades.forEach(([key, upgrade]) => {
+        if (upgrade.repeatable || upgrade.owned === 0) {
+            const upgradeButton = document.createElement('button');
+            upgradeButton.className = 'changeable';
+            upgradeButton.id = `upgrade-${key}`;
+            upgradeButton.innerHTML = `
+                Name: ${upgrade.title}<br>
+                ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
+                Gives: ${upgrade.gives}<br>
+                Costs: ${upgrade.cost.toFixed(2)}
+            `;
+            upgradeButton.onclick = () => buyUpgrade(key);
+            upgradeArea.appendChild(upgradeButton);
+        }
     });
     updateUpgradeButtons();
 }
 
 export function updateUpgradeButtons() {
-    Object.entries(upgrades).forEach(([key, upgrade]) => {
+    const sortedUpgrades = sortUpgrades();
+    sortedUpgrades.forEach(([key, upgrade]) => {
         const upgradeButton = document.getElementById(`upgrade-${key}`);
         if (upgradeButton) {
             upgradeButton.innerHTML = `
@@ -85,4 +96,8 @@ export function updateUpgradeButtons() {
             upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
         }
     });
+}
+
+export function sortUpgrades() {
+    return Object.entries(upgrades).sort((a, b) => a[1].cost - b[1].cost);
 }

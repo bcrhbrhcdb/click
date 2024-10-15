@@ -37,7 +37,10 @@ export const upgradeTypes = {
             console.error("CPS display elements not found");
         }
     },
-    OFFLINEPROGRESS: (upgrade) => {
-        // Implement offline progress logic here
+    OFFLINEPROGRESS: (timeDiff) => {
+        const offlineClicks = stats.cps * (timeDiff / 1000);
+        stats.clicks += offlineClicks;
+        stats.totalClicks += offlineClicks;
+        return offlineClicks;
     }
 };

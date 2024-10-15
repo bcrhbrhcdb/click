@@ -1,4 +1,4 @@
-import { upgrades, buyUpgrade, createUpgradeElements, updateUpgradeButtons } from "./upgrades.js";
+import { upgrades, buyUpgrade, createUpgradeElements, updateUpgradeButtons, sortUpgrades } from "./upgrades.js";
 import { saveData } from './save.js';
 
 export const stats = {
@@ -7,15 +7,16 @@ export const stats = {
     amountPerClick: 1,
     upgradesOwned: [],
     cps: 0,
+    lastSaveTime: Date.now()
 };
 
 export const clickButton = document.getElementById("click-button");
 export const clicks = document.getElementById("clicks");
 export const totalClicks = document.getElementById("total-clicks");
 
-const TICKS_PER_SECOND = 20;
+const TICKS_PER_SECOND = 25;
 const TICK_INTERVAL = 1000 / TICKS_PER_SECOND;
-const SAVE_INTERVAL = 60000; // Save every minute
+const SAVE_INTERVAL = 10000; // Save every 10 seconds
 
 let gameTickInterval;
 
@@ -31,8 +32,9 @@ export function upgradeLogic() {
         upgradeArea.innerHTML = '<h2 class="changeable" style="text-align: center;">Upgrades</h2>';
     }
 
-    for (let key in upgrades) {
-        const upgrade = upgrades[key];
+    const sortedUpgrades = sortUpgrades();
+    
+    sortedUpgrades.forEach(([key, upgrade]) => {
         let upgradeButton = document.getElementById(`upgrade-${key}`);
         
         if (!upgradeButton && (upgrade.repeatable || upgrade.owned === 0)) {
@@ -52,7 +54,7 @@ export function upgradeLogic() {
             `;
             upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
         }
-    }
+    });
 }
 
 export function saveGame() {
@@ -61,6 +63,7 @@ export function saveGame() {
         upgrades: upgrades
     };
     saveData.save('gameState', gameState);
+    stats.lastSaveTime = Date.now();
 }
 
 export function loadGame() {
@@ -68,8 +71,25 @@ export function loadGame() {
     if (savedState) {
         Object.assign(stats, savedState.stats);
         Object.assign(upgrades, savedState.upgrades);
+        const currentTime = Date.now();
+        const timeDiff = currentTime - stats.lastSaveTime;
+        if (timeDiff > 0) {
+            const offlineProgress = (stats.cps * timeDiff) / 1000;
+            stats.clicks += offlineProgress;
+            stats.totalClicks += offlineProgress;
+            showOfflineProgressPopup(offlineProgress, timeDiff);
+        }
         updateDisplay();
     }
+}
+
+function showOfflineProgressPopup(progress, time) {
+    const hours = Math.floor(time / 3600000);
+    const minutes = Math.floor((time % 3600000) / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    const timeString = `${hours}h ${minutes}m ${seconds}s`;
+    
+    alert(`Welcome back! You were gone for ${timeString} and earned ${progress.toFixed(2)} clicks while away.`);
 }
 
 export function updateDisplay() {
