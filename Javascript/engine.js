@@ -46,17 +46,20 @@ export function upgradeLogic() {
         }
         
         if (upgradeButton) {
-            upgradeButton.innerHTML = `
-                Name: ${upgrade.title}<br>
-                ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
-                Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost.toFixed(2)}
-            `;
-            upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
+            if (upgrade.repeatable || upgrade.owned === 0) {
+                upgradeButton.innerHTML = `
+                    Name: ${upgrade.title}<br>
+                    ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
+                    Gives: ${typeof upgrade.gives === 'function' ? upgrade.gives() : upgrade.gives}<br>
+                    Costs: ${upgrade.cost.toFixed(2)}
+                `;
+                upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
+            } else {
+                upgradeButton.remove();
+            }
         }
     });
 }
-
 export function saveGame() {
     const gameState = {
         stats: stats,

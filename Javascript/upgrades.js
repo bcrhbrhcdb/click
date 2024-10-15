@@ -6,7 +6,7 @@ export const upgrades = {
         title: "add on click pr click",
         cost: 135,
         initialCost: 135,
-        type: upgradeTypes.ADDITIVE,
+        type: "ADDITIVE",
         gives: 1,
         owned: 0,
         repeatable: false,
@@ -15,7 +15,7 @@ export const upgrades = {
         title: "gib click gib more (1)",
         cost: 450,
         initialCost: 450,
-        type: upgradeTypes.MULTIPLICATIVE,
+        type: "MULTIPLICATIVE",
         gives: 2,
         owned: 0,
         repeatable: false,
@@ -26,8 +26,8 @@ export const upgrades = {
         title: "you want idle?",
         cost: 20,
         initialCost: 20,
-        type: upgradeTypes.PASSIVEBUILDING1,
-        gives: 0.2,
+        type: "PASSIVEBUILDING1",
+        gives: 0.3,
         owned: 0,
         repeatable: true,
         costIncrease: 1.23,
@@ -38,19 +38,17 @@ export function buyUpgrade(upgradeKey) {
     const upgrade = upgrades[upgradeKey];
     if (stats.clicks >= upgrade.cost) {
         stats.clicks -= upgrade.cost;
-        upgrade.type(upgrade);
+        if (typeof upgradeTypes[upgrade.type] === 'function') {
+            upgradeTypes[upgrade.type](upgrade);
+        } else {
+            console.error(`Invalid upgrade type: ${upgrade.type}`);
+        }
         if (!stats.upgradesOwned.includes(upgrade.title)) {
             stats.upgradesOwned.push(upgrade.title);
         }
         upgrade.owned++;
         if (upgrade.repeatable) {
             upgrade.cost = Math.floor(upgrade.cost * upgrade.costIncrease);
-        } else {
-            // Remove the upgrade button if it's not repeatable
-            const upgradeButton = document.getElementById(`upgrade-${upgradeKey}`);
-            if (upgradeButton) {
-                upgradeButton.remove();
-            }
         }
         updateDisplay();
         saveGame();
@@ -86,18 +84,21 @@ export function updateUpgradeButtons() {
     sortedUpgrades.forEach(([key, upgrade]) => {
         const upgradeButton = document.getElementById(`upgrade-${key}`);
         if (upgradeButton) {
-            upgradeButton.innerHTML = `
-                Name: ${upgrade.title}<br>
-                ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
-                Gives: ${upgrade.gives}<br>
-                Costs: ${upgrade.cost.toFixed(2)}
-            `;
-            upgradeButton.disabled = stats.clicks < upgrade.cost;
-            upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
+            if (upgrade.repeatable || upgrade.owned === 0) {
+                upgradeButton.innerHTML = `
+                    Name: ${upgrade.title}<br>
+                    ${upgrade.repeatable ? `Owned: ${upgrade.owned}<br>` : ''}
+                    Gives: ${typeof upgrade.gives === 'function' ? upgrade.gives() : upgrade.gives}<br>
+                    Costs: ${upgrade.cost.toFixed(2)}
+                `;
+                upgradeButton.disabled = stats.clicks < upgrade.cost;
+                upgradeButton.style.display = stats.totalClicks >= upgrade.cost ? 'block' : 'none';
+            } else {
+                upgradeButton.remove();
+            }
         }
     });
 }
-
 export function sortUpgrades() {
     return Object.entries(upgrades).sort((a, b) => a[1].cost - b[1].cost);
 }
