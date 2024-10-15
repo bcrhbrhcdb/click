@@ -85,7 +85,6 @@ const themes = {
             border: 'none',      
             backgroundColor: '#176baa',       
             color: 'white',       
-            fontSize: '14px',      
             width: '100%',       
             fontWeight: '500',       
             transition: 'transform 0.5s',     
