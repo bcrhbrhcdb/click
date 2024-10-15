@@ -45,10 +45,11 @@ export const upgrades = {
 title: "upgrade autoclicker",
         cost: 1000,
         initialCost: 1000,
-        type: "MULTIPLICATIVE",
+        type: "MOREPASSIVE",
         gives: () => 0.75, // 50% of CPS while offline
         owned: 0,
         repeatable: false,
+        affectedUpgrade: "autoClicker",
     }
 };
 
