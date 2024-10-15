@@ -1,15 +1,15 @@
-import { stats, clicks, clickButton, addClicks, totalClicks, loadGame, updateDisplay } from "./engine.js";
+import { clickButton, addClicks, updateDisplay, resetGame, initGame } from "./engine.js";
 
 clickButton.addEventListener("click", () => {
     addClicks();
     updateDisplay();
 });
 
-// Initialize game
-function initGame() {
-    loadGame();
-    updateDisplay();
-}
-
 // Call initGame when the page loads
 window.addEventListener('load', initGame);
+
+// Add reset button functionality
+const resetButton = document.getElementById("resetGame");
+if (resetButton) {
+    resetButton.addEventListener("click", resetGame);
+}
