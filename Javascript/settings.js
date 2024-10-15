@@ -79,7 +79,7 @@ const themes = {
         }
     },
     noob: {
-        body: { backgroundColor: 'rgb(165,188,80)', color: 'rgb(86, 72, 72)', fontFamily: 'Impact' cursive' },
+        body: { backgroundColor: 'rgb(165,188,80)', color: 'rgb(86, 72, 72)', fontFamily: 'Impact, Haettenschweiler, Arial Narrow Bold, sans-serif' },
         button: { 
             borderRadius: '3px',   
             border: 'none',      
