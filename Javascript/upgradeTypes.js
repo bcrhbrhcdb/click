@@ -49,9 +49,9 @@ export const upgradeTypes = {
         } else {
             stats.cps *= upgrade.gives;
         }
-        const amountPerClickDisplay = document.getElementById("amountPerClick");
-        if (amountPerClickDisplay) {
-            amountPerClickDisplay.innerText = stats.amountPerClick.toFixed(2);
+    const cpsValue = document.getElementById("cPS");
+        if (cpsValue) {
+            cpsValue.innerText = stats.amountPerClick.toFixed(2);
         }
     },
     
