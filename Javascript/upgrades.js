@@ -16,7 +16,7 @@ export const upgrades = {
         cost: 450,
         initialCost: 450,
         type: "MULTIPLICATIVE",
-        gives: 2,
+        gives: 2.5,
         owned: 0,
         repeatable: false,
         costIncrease: 1.5,
