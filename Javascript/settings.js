@@ -191,21 +191,21 @@ function applyThemeToElement(element, theme) {
     }
 
     if (element.tagName === 'BUTTON') {
-        Object.entries(themeStyles.button).forEach(([property, value]) => {
-            element.style[property] = value;
-        });
+        if (element.id.startsWith('building-')) {
+            Object.assign(element.style, themeStyles.buildings);
+        } else {
+            Object.assign(element.style, themeStyles.button);
+        }
     } else if (element.tagName === 'DIV') {
-        Object.entries(themeStyles.div).forEach(([property, value]) => {
-            element.style[property] = value;
-        });
+        if (element.id === 'buildingArea') {
+            Object.assign(element.style, themeStyles.buildings);
+        } else {
+            Object.assign(element.style, themeStyles.div);
+        }
     } else if (element.tagName === 'SELECT') {
-        Object.entries(themeStyles.select).forEach(([property, value]) => {
-            element.style[property] = value;
-        });
+        Object.assign(element.style, themeStyles.select);
     } else if (['P', 'SPAN', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(element.tagName)) {
-        Object.entries(themeStyles.text).forEach(([property, value]) => {
-            element.style[property] = value;
-        });
+        Object.assign(element.style, themeStyles.text);
     }
 }
 

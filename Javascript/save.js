@@ -1,5 +1,3 @@
-// save.js
-
 export const saveData = {
     save: function(key, data) {
         try {

@@ -1,13 +1,10 @@
 import { stats } from "./engine.js";
 import { upgrades } from "./upgrades.js";
+import { buildings } from "./buildings.js";
 
 export const upgradeTypes = {
     ADDITIVE: (upgrade) => {
         stats.amountPerClick += upgrade.gives;
-        const amountPerClickDisplay = document.getElementById("amountPerClick");
-        if (amountPerClickDisplay) {
-            amountPerClickDisplay.innerText = stats.amountPerClick.toFixed(2);
-        }
     },
     MULTIPLICATIVE: (upgrade) => {
         if (upgrade.affectedUpgrade) {
@@ -21,38 +18,18 @@ export const upgradeTypes = {
         } else {
             stats.amountPerClick *= upgrade.gives;
         }
-        const amountPerClickDisplay = document.getElementById("amountPerClick");
-        if (amountPerClickDisplay) {
-            amountPerClickDisplay.innerText = stats.amountPerClick.toFixed(2);
-        }
     },
-    PASSIVEBUILDING1: (upgrade) => {
-        stats.cps = Number(stats.cps) + Number(typeof upgrade.gives === 'function' ? upgrade.gives() : upgrade.gives);
-        const cpsDisplay = document.getElementById("cpsDisplay");
-        const cpsValue = document.getElementById("cPS");
-        if (cpsDisplay && cpsValue) {
-            cpsDisplay.style.display = "block";
-            cpsValue.textContent = Number(stats.cps).toFixed(2);
-        } else {
-            console.error("CPS display elements not found");
-        }
-    },
-    MOREPASSIVE: (upgrade) => {
-        if (upgrade.affectedUpgrade) {
-            const affectedUpgrade = upgrades[upgrade.affectedUpgrade];
-            if (affectedUpgrade) {
-                const oldGives = affectedUpgrade.gives();
-                affectedUpgrade.gives = () => oldGives * upgrade.gives;
-                stats.cps *= upgrade.gives;
+    BUILDING_BOOST: (upgrade) => {
+        if (upgrade.affectedBuilding) {
+            const affectedBuilding = buildings[upgrade.affectedBuilding];
+            if (affectedBuilding) {
+                affectedBuilding.production *= upgrade.gives;
+                stats.cps = Object.values(buildings).reduce((sum, building) => sum + building.production * building.owned, 0);
             } else {
-                console.error(`Affected upgrade ${upgrade.affectedUpgrade} not found`);
+                console.error(`Affected building ${upgrade.affectedBuilding} not found`);
             }
         } else {
-            stats.cps *= upgrade.gives;
-        }
-        const cpsValue = document.getElementById("cPS");
-        if (cpsValue) {
-            cpsValue.innerText = stats.cps.toFixed(2);
+            console.error("BUILDING_BOOST upgrade type requires an affectedBuilding property");
         }
     },
     OFFLINE: (upgrade) => {

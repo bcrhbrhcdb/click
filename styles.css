@@ -44,3 +44,10 @@ h1 {
   font-weight: bold;
   font-size: 1.5rem;
 }
+a{
+  color: white;
+
+}
+a:visited{
+  color:white;
+}

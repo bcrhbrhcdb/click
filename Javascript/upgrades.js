@@ -4,8 +4,8 @@ import { stats, updateDisplay, saveGame } from "./engine.js";
 export const upgrades = {
     clicker1: {
         title: "add on click pr click",
-        cost: 135,
-        initialCost: 135,
+        cost: 35,
+        initialCost: 35,
         type: "ADDITIVE",
         gives: 1,
         owned: 0,
@@ -13,8 +13,8 @@ export const upgrades = {
     },
     clicker1Boost: {
         title: "gib click gib more (1)",
-        cost: 450,
-        initialCost: 450,
+        cost: 135,
+        initialCost: 135,
         type: "MULTIPLICATIVE",
         gives: 2.5,
         owned: 0,
@@ -22,22 +22,12 @@ export const upgrades = {
         costIncrease: 1.5,
         affectedUpgrade: 'clicker1'
     },
-    autoClicker: {
-        title: "you want idle?",
-        cost: 10,
-        initialCost: 10,
-        type: "PASSIVEBUILDING1",
-        gives: () => 0.25,
-        owned: 0,
-        repeatable: true,
-        costIncrease: 1.23,
-    },
     offlineProgress: {
         title: "Offline Progress",
         cost: 100000,
         initialCost: 100000,
         type: "OFFLINE",
-        gives: 0.5,
+        gives: 0.5, // 50% of CPS while offline
         owned: 0,
         repeatable: false,
     },
@@ -45,11 +35,11 @@ export const upgrades = {
         title: "upgrade autoclicker",
         cost: 1000,
         initialCost: 1000,
-        type: "MOREPASSIVE",
+        type: "BUILDING_BOOST",
         gives: 2,
         owned: 0,
         repeatable: false,
-        affectedUpgrade: "autoClicker",
+        affectedBuilding: "autoClicker",
     }
 };
 
@@ -118,7 +108,6 @@ export function sortUpgrades() {
 }
 
 export function loadUpgrades(savedUpgrades) {
-    // Reset stats that are affected by upgrades
     stats.amountPerClick = 1;
     stats.cps = 0;
     stats.offlineProgressRate = 0;
@@ -128,7 +117,6 @@ export function loadUpgrades(savedUpgrades) {
             upgrades[key].owned = savedUpgrades[key].owned;
             upgrades[key].cost = savedUpgrades[key].cost;
 
-            // Reapply the effect of each owned upgrade
             for (let i = 0; i < upgrades[key].owned; i++) {
                 if (typeof upgradeTypes[upgrades[key].type] === 'function') {
                     upgradeTypes[upgrades[key].type](upgrades[key]);
@@ -139,12 +127,10 @@ export function loadUpgrades(savedUpgrades) {
 }
 
 export function recalculateUpgradeEffects() {
-    // Reset stats that are affected by upgrades
     stats.amountPerClick = 1;
     stats.cps = 0;
     stats.offlineProgressRate = 0;
 
-    // Reapply all upgrade effects
     for (let key in upgrades) {
         for (let i = 0; i < upgrades[key].owned; i++) {
             if (typeof upgradeTypes[upgrades[key].type] === 'function') {
