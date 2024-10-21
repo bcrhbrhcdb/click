@@ -1,5 +1,13 @@
-import { clickButton, addClicks, updateDisplay, resetGame, initGame, saveGame, exportSave, importSave } from "./engine.js";
-
+import { 
+    clickButton, 
+    addClicks, 
+    updateDisplay, 
+    resetGame, 
+    initGame, 
+    saveGame, 
+    exportSave, 
+    importSave 
+} from "./engine.js";
 clickButton.addEventListener("click", () => {
     addClicks();
     updateDisplay();

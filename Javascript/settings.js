@@ -25,6 +25,17 @@ const themes = {
             display: 'block',
             width: '100%'
         },
+        buildingButton: {
+            backgroundColor: '#e0e0e0',
+            color: '#000000',
+            border: '1px solid #ccc',
+            borderRadius: '5px',
+            padding: '10px',
+            margin: '5px',
+            cursor: 'pointer',
+            display: 'block',
+            width: '100%'
+        },
         text: { color: '#000000' },
         div: { 
             backgroundColor: '#f9f9f9', 

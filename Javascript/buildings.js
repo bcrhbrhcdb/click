@@ -1,5 +1,6 @@
 import { buildingTypes } from "./buildingTypes.js";
 import { stats, updateDisplay, saveGame } from "./engine.js";
+import { applyThemeToElement } from "./settings.js";
 
 export const buildings = {
     autoClicker: {
@@ -89,6 +90,7 @@ export function createBuildingElements() {
             buildingButton.id = `building-${key}`;
             buildingButton.onclick = () => buyBuilding(key);
             buildingArea.appendChild(buildingButton);
+            applyThemeToElement(buildingButton, localStorage.getItem('currentTheme') || 'light');
         }
     });
     updateBuildingButtons();
@@ -100,10 +102,9 @@ export function updateBuildingButtons() {
         const buildingButton = document.getElementById(`building-${key}`);
         if (buildingButton) {
             if (building.repeatable || building.owned === 0) {
-                buildingButton.className = '';
-                buildingButton.style.textAlign = 'center';
+                buildingButton.className = 'changeable';
                 buildingButton.innerHTML = `
-                    <div class="" style="text-align: center;">
+                    <div style="text-align: center;">
                         Name: ${building.title}<br>
                         Owned: ${building.owned}<br>
                         Production: ${building.production || building.multiplier}<br>
@@ -134,14 +135,13 @@ export function loadBuildings(savedBuildings) {
 
 export function recalculateBuildingEffects() {
     stats.cps = 0;
-
     for (let key in buildings) {
-        for (let i = 0; i < buildings[key].owned; i++) {
-            if (typeof buildingTypes[buildings[key].type] === 'function') {
-                buildingTypes[buildings[key].type](buildings[key]);
-            }
+        const building = buildings[key];
+        if (building.type === "PASSIVE") {
+            stats.cps += building.production * building.owned;
+        } else if (building.type === "MULTIPLIER") {
+            stats.cps *= Math.pow(building.multiplier, building.owned);
         }
     }
-
     updateDisplay();
 }
