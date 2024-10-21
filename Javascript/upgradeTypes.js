@@ -41,7 +41,8 @@ export const upgradeTypes = {
         if (upgrade.affectedUpgrade) {
             const affectedUpgrade = upgrades[upgrade.affectedUpgrade];
             if (affectedUpgrade) {
-                affectedUpgrade.gives *= upgrade.gives;
+                const oldGives = affectedUpgrade.gives();
+                affectedUpgrade.gives = () => oldGives * upgrade.gives;
                 stats.cps *= upgrade.gives;
             } else {
                 console.error(`Affected upgrade ${upgrade.affectedUpgrade} not found`);
@@ -49,12 +50,11 @@ export const upgradeTypes = {
         } else {
             stats.cps *= upgrade.gives;
         }
-    const cpsValue = document.getElementById("cPS");
+        const cpsValue = document.getElementById("cPS");
         if (cpsValue) {
-            cpsValue.innerText = stats.amountPerClick.toFixed(2);
+            cpsValue.innerText = stats.cps.toFixed(2);
         }
     },
-    
     OFFLINE: (upgrade) => {
         stats.offlineProgressRate = upgrade.gives;
     }
